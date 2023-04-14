@@ -205,7 +205,7 @@ public class CarControllerDisplay : MonoBehaviour {
            CarOptions.currentTransmission--;
         }
 
-            if (Input.GetAxisRaw("Vertical") > 0)
+            if (Input.GetKeyDown(KeyCode.Q))
         {
             motorFront.motorSpeed = -mySpeed;
             if (CarOptions.FWD == true)
