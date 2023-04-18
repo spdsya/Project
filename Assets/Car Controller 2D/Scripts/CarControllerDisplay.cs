@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class CarControllerDisplay : MonoBehaviour {
 
     public CarController CarOptions;
-
     private WheelJoint2D[] Wheels;
     private WheelJoint2D FrontWheel;
     private WheelJoint2D RearWheel;
@@ -231,5 +230,7 @@ public class CarControllerDisplay : MonoBehaviour {
             motorRear.maxMotorTorque = 0;
             RearWheel.motor = motorRear;
         }
+
+        
     }
 }
