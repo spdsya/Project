@@ -12,6 +12,10 @@ public class CarController : ScriptableObject
     [Space(10)]
     public string SpeedTextName = "SpeedText";
     public string GearTextName = "GearText";
+    public string EngineTextName = "EngineText";
+    public string TorqueTextName = "TorqueText";
+    public string TireTextName = "TireText";
+
 
     [Space(10)]
     public bool FWD = false;

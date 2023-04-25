@@ -11,9 +11,14 @@ public class CarControllerDisplay : MonoBehaviour {
     private WheelJoint2D RearWheel;
     public JointMotor2D motorFront;
     public JointMotor2D motorRear;
+    public double susStep;
+    public double dR;
 
     private Text SpeedText;
     private Text GearText;
+    private Text EngineText;
+    private Text TorqueText;
+    private Text TireText;
 
     private float carSpeed;
     private float carMotorforce;
@@ -23,10 +28,14 @@ public class CarControllerDisplay : MonoBehaviour {
     private float myMassRearWheel;
     private string mySpeedString;
     private string myGearString;
+    private string myEngineString;
+    private string myTorqueString;
+    private string myTireString;
 
     void Start()
     {
-        CarOptions.currentTransmission = 0;
+        susStep = 0.2f;
+        CarOptions.currentTransmission = 3;
         Wheels = GetComponents<WheelJoint2D>();
         for(int i=0; i < Wheels.Length; i++)
         {
@@ -38,6 +47,12 @@ public class CarControllerDisplay : MonoBehaviour {
         RearWheel.connectedBody.mass = CarOptions.RearWheelMass;
         mySpeedString = CarOptions.SpeedTextName;
         myGearString = CarOptions.GearTextName;
+        myEngineString = CarOptions.EngineTextName;
+        myTorqueString = CarOptions.TorqueTextName;
+        myTireString = CarOptions.TireTextName;
+        var FrontWheelNew = new WheelJoint2D();
+        //FrontWheel.m_Suspension.m_DampingRatio = 0.2f;
+        //FrontWheel = FrontWheelNew;
     }
 
     void FixedUpdate () {
@@ -63,6 +78,10 @@ public class CarControllerDisplay : MonoBehaviour {
         float mySpeedCar = gameObject.GetComponent<Rigidbody2D>().velocity.magnitude * 3.6f;
         float SpeedCar = Mathf.Round(mySpeedCar);
         int myGear = CarOptions.currentTransmission;
+        float myEngine = CarOptions.MaxSpeed;
+        float myTorque = CarOptions.motorForce;
+        //int myTire = gameObject.Find(Wheel).GetComponent<Friction>;
+        //FrontWheel.suspension = susStep;
         GearText = GameObject.Find(myGearString).GetComponent<Text>();
         if(GearText != null)
         {
@@ -73,6 +92,22 @@ public class CarControllerDisplay : MonoBehaviour {
         {
             SpeedText.text = "Speed: " + SpeedCar.ToString();
         }
+        EngineText = GameObject.Find(myEngineString).GetComponent<Text>();
+        if (EngineText != null)
+        {
+            EngineText.text = "Engine: " + myEngine.ToString();
+        }
+        TorqueText = GameObject.Find(myTorqueString).GetComponent<Text>();
+        if (TorqueText != null)
+        {
+            TorqueText.text = "Torque: " + myTorque.ToString();
+        }
+        /*TireText = GameObject.Find(myTireString).GetComponent<Text>();
+        if (TireText != null)
+        {
+            TireText.text = "Tire: " + MyTire.ToString();
+        }*/
+        
     }
 
     void TransmissionsStart()
@@ -204,7 +239,7 @@ public class CarControllerDisplay : MonoBehaviour {
            CarOptions.currentTransmission--;
         }
 
-            if (Input.GetKeyDown(KeyCode.Q))
+        if (GameObject.Find("Acc").GetComponent<AccV>().accClick)
         {
             motorFront.motorSpeed = -mySpeed;
             if (CarOptions.FWD == true)
@@ -214,6 +249,22 @@ public class CarControllerDisplay : MonoBehaviour {
             FrontWheel.motor = motorFront;
 
             motorRear.motorSpeed = -mySpeed;
+            if (CarOptions.RWD == true)
+            {
+                motorRear.maxMotorTorque = myMotorforce;
+            }
+            RearWheel.motor = motorRear;
+        }
+        else if (GameObject.Find("Brake").GetComponent<BrakeV>().brakeClick)
+        {
+            motorFront.motorSpeed = +mySpeed;
+            if (CarOptions.FWD == true)
+            {
+                motorFront.maxMotorTorque = myMotorforce;
+            }
+            FrontWheel.motor = motorFront;
+
+            motorRear.motorSpeed = +mySpeed;
             if (CarOptions.RWD == true)
             {
                 motorRear.maxMotorTorque = myMotorforce;
@@ -230,7 +281,6 @@ public class CarControllerDisplay : MonoBehaviour {
             motorRear.maxMotorTorque = 0;
             RearWheel.motor = motorRear;
         }
-
         
     }
 }
